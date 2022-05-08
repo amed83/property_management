@@ -8,4 +8,4 @@ and `npm run start` to run the application.
 - Improve typing for fetch api
 - Add Error Page, Loading page or spinner
 - Enrich the UI, improving details and UX
-- Add meaningful error message for api calls
+- Add meaningful error messages for api calls
