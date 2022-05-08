@@ -1,10 +1,10 @@
 import "./App.css";
-import { Properties } from "./containers/Properties/Properties";
+import Dashboard from "./containers/Dashboard";
 
 function App() {
   return (
     <div className="App">
-      <Properties />
+      <Dashboard />
     </div>
   );
 }

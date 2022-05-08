@@ -1,11 +1,9 @@
 import Container from "@mui/material/Container";
-import List from "@mui/material/List";
 import { FC } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import api from "../../api";
 import { PropertyProps, Status } from "../../types/types";
-
-import PropertyItem from "../PropertyItem";
+import PropertyList from "../../components/PropertyList";
 
 const updateList = async (id: string, status: Status) => {
   await api(`/properties/${id}`, {
@@ -17,7 +15,7 @@ const updateList = async (id: string, status: Status) => {
   });
 };
 
-export const Properties: FC = () => {
+export const Dashboard: FC = () => {
   const {
     isLoading,
     data: properties,
@@ -53,21 +51,13 @@ export const Properties: FC = () => {
 
   return (
     <Container>
-      {properties && properties.length > 0 && (
-        <List>
-          {properties.map((prop) => (
-            <PropertyItem
-              key={prop.id}
-              id={prop.id}
-              imageUrl={prop.imageUrl}
-              address={prop.address}
-              askingPrice={prop.askingPrice}
-              status={prop.status}
-              bedroomsNumber={prop.bedroomsNumber}
-              togglePropertyStatus={togglePropertyStatus}
-            />
-          ))}
-        </List>
+      {properties && properties.length > 0 ? (
+        <PropertyList
+          properties={properties}
+          togglePropertyStatus={togglePropertyStatus}
+        />
+      ) : (
+        <div>Sorry, no properties to show at the moment</div>
       )}
     </Container>
   );

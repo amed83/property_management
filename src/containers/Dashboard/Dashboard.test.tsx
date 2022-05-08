@@ -1,8 +1,8 @@
 import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import { rest } from "msw";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Dashboard from ".";
 import { server } from "../../mocks/server";
-import { Properties } from "./Properties";
 
 describe("Properties", () => {
   test("should render loading message while loading data", async () => {
@@ -10,7 +10,7 @@ describe("Properties", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <Properties />
+        <Dashboard />
       </QueryClientProvider>
     );
 
@@ -23,7 +23,7 @@ describe("Properties", () => {
     const queryClient = new QueryClient();
     render(
       <QueryClientProvider client={queryClient}>
-        <Properties />
+        <Dashboard />
       </QueryClientProvider>
     );
 
@@ -55,7 +55,7 @@ describe("Properties", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <Properties />
+        <Dashboard />
       </QueryClientProvider>
     );
 
@@ -75,7 +75,7 @@ describe("Properties", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <Properties />
+        <Dashboard />
       </QueryClientProvider>
     );
 

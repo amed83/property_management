@@ -3,13 +3,12 @@ import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
 import BedIcon from "@mui/icons-material/Bed";
 import { FC } from "react";
-
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { PropertyProps } from "../../types/types";
+import { PropertyProps, Status } from "../../types/types";
 
 export interface PropertyItemProps extends PropertyProps {
-  togglePropertyStatus: (id: string, status: "active" | "expired") => void;
+  togglePropertyStatus: (id: string, status: Status) => void;
 }
 
 export const PropertyItem: FC<PropertyItemProps> = ({
