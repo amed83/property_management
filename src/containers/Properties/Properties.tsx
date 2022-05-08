@@ -3,19 +3,9 @@ import List from "@mui/material/List";
 import { FC } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import api from "../../api";
+import { PropertyProps, Status } from "../../types/types";
 
 import PropertyItem from "../PropertyItem";
-
-type Status = "active" | "expired";
-
-export interface PropertyProps {
-  id: string;
-  imageUrl: string;
-  bedroomsNumber: number;
-  address: string;
-  askingPrice: number;
-  status: "active" | "expired";
-}
 
 const updateList = async (id: string, status: Status) => {
   await api(`/properties/${id}`, {
@@ -47,10 +37,7 @@ export const Properties: FC = () => {
     }
   );
 
-  const togglePropertyStatus = async (
-    id: string,
-    status: "active" | "expired"
-  ) => {
+  const togglePropertyStatus = async (id: string, status: Status) => {
     updatePropertiesMutation.mutate({
       id,
       status: status === "active" ? "expired" : "active",

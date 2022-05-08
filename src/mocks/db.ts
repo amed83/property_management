@@ -1,5 +1,5 @@
 import { factory, primaryKey } from "@mswjs/data";
-import { PropertyProps } from "../containers/Properties/Properties";
+import { PropertyProps } from "../types/types";
 
 export const mockedProperties: PropertyProps[] = [
   {
