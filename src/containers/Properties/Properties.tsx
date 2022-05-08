@@ -32,9 +32,10 @@ export const Properties: FC = () => {
     isLoading,
     data: properties,
     isError,
-  } = useQuery<PropertyProps[]>("properties", async () => {
-    return await api(`/properties/`, { method: "GET" });
-  });
+  } = useQuery<PropertyProps[]>(
+    "properties",
+    async () => await api(`/properties/`, { method: "GET" })
+  );
 
   const queryClient = useQueryClient();
   const updatePropertiesMutation = useMutation(
@@ -59,7 +60,6 @@ export const Properties: FC = () => {
   if (isError) {
     return <div>Error</div>;
   }
-
   if (isLoading) {
     return <div>...Loading</div>;
   }

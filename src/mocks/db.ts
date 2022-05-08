@@ -8,7 +8,7 @@ export const mockedProperties: PropertyProps[] = [
     askingPrice: 120000,
     status: "active",
     bedroomsNumber: 3,
-    imageUrl: `${process.env.PUBLIC_URL} assets/images/houseImgOne.jpeg`,
+    imageUrl: `${process.env.PUBLIC_URL} assets/images/houseImg1a.jpeg`,
   },
   {
     id: "2a",
@@ -16,7 +16,15 @@ export const mockedProperties: PropertyProps[] = [
     askingPrice: 145000,
     status: "expired",
     bedroomsNumber: 5,
-    imageUrl: `${process.env.PUBLIC_URL} assets/images/houseImgTwo.jpeg`,
+    imageUrl: `${process.env.PUBLIC_URL} assets/images/houseImg2a.jpeg`,
+  },
+  {
+    id: "3a",
+    address: `222 Nitshill Road, Glasgow G53`,
+    askingPrice: 350000,
+    status: "active",
+    bedroomsNumber: 2,
+    imageUrl: `${process.env.PUBLIC_URL} assets/images/houseImg3a.jpeg`,
   },
 ];
 
