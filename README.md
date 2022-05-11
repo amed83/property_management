@@ -1,6 +1,6 @@
 # How to run
 
-To run this project simply clone the folder and run `npm istall` to install dependencies
+To run this project simply clone the folder and run `npm install` to install dependencies
 and `npm run start` to run the application.
 
 # Things to improve
