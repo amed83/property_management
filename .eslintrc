@@ -1,0 +1,42 @@
+{
+  "plugins": ["@typescript-eslint", "prettier", "jest","import"],
+  "extends": [
+    "eslint:recommended",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:jest/recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "plugin:import/recommended",
+    "plugin:react/jsx-runtime"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "project": "./tsconfig.json"
+  },
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "rules": {
+    "no-param-reassign": [
+      "warn",
+      { "props": true, "ignorePropertyModificationsFor": ["state"] }
+    ],
+    "react/prop-types": 0,
+    "react/require-default-props": 0,
+    "import/prefer-default-export": 0,
+    "@typescript-eslint/no-explicit-any": 1,
+    "import/no-named-as-default": 0,
+    "react/jsx-props-no-spreading": 1,
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".tsx"] }],
+    "react/no-unescaped-entities": 0,
+    "jsx-a11y/label-has-associated-control": 0,
+    "jsx-a11y/anchor-is-valid": 0,
+    "import/no-extraneous-dependencies": 0
+  }
+}

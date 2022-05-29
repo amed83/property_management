@@ -29,7 +29,7 @@ export const PropertyItem: FC<PropertyItemProps> = ({
   >
     <Grid container spacing={2}>
       <Grid item md={7} sm={12}>
-        <img src={imageUrl} width={500} alt="property" />
+        <img src={imageUrl} width="100%" alt="property" />
       </Grid>
 
       <Grid item md={5} sm={12}>

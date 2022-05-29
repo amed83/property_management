@@ -1,63 +1,66 @@
-import Container from "@mui/material/Container";
-import { FC } from "react";
-import { useQuery, useQueryClient, useMutation } from "react-query";
-import api from "../../api";
-import { PropertyProps, Status } from "../../types/types";
-import PropertyList from "../../components/PropertyList";
-
-const updateList = async (id: string, status: Status) => {
-  await api(`/properties/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ status }),
-  });
-};
+/* eslint-disable react/react-in-jsx-scope */
+import Container from '@mui/material/Container';
+import { FC, useEffect } from 'react';
+import { PropertyProps, Status } from '../../types/types';
+import PropertyList from '../../components/PropertyList';
+import useFetch from '../../hooks/useFetch';
 
 export const Dashboard: FC = () => {
   const {
-    isLoading,
-    data: properties,
-    isError,
-  } = useQuery<PropertyProps[]>(
-    "properties",
-    async () => await api(`/properties/`, { method: "GET" })
-  );
+    handleFetch: getProperties,
+    data: propertiesData,
+    loading: isLoadingProperties,
+    error: errorFetchingProperties,
+  } = useFetch<PropertyProps[]>();
 
-  const queryClient = useQueryClient();
-  const updatePropertiesMutation = useMutation(
-    ({ id, status }: { id: string; status: Status }) => updateList(id, status),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("properties");
+  const {
+    handleFetch: updateProperty,
+    error: errorUpdatingProperties,
+    data: updatedPropertiesData,
+    loading: isLoadingUpdateProperties,
+  } = useFetch<PropertyProps[]>();
+
+  useEffect(() => {
+    getProperties('/properties/', {
+      method: 'GET',
+    });
+  }, [getProperties, updatedPropertiesData]);
+
+  const handleTogglePropertyStatus = async (id: string, status: Status) => {
+    updateProperty(`/properties/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    }
-  );
-
-  const togglePropertyStatus = async (id: string, status: Status) => {
-    updatePropertiesMutation.mutate({
-      id,
-      status: status === "active" ? "expired" : "active",
+      body: JSON.stringify({
+        status: status === 'active' ? 'expired' : 'active',
+      }),
     });
   };
 
-  if (isError) {
-    return <div>Error</div>;
+  if (isLoadingProperties || isLoadingUpdateProperties) {
+    return (
+      <div style={{ marginTop: '100px' }}>
+        <h1>...Loading</h1>
+      </div>
+    );
   }
-  if (isLoading) {
-    return <div>...Loading</div>;
+
+  if (errorFetchingProperties || errorUpdatingProperties) {
+    return <div>Something went wrong </div>;
   }
 
   return (
     <Container>
-      {properties && properties.length > 0 ? (
+      {!isLoadingProperties && propertiesData && propertiesData.length > 0 ? (
         <PropertyList
-          properties={properties}
-          togglePropertyStatus={togglePropertyStatus}
+          properties={propertiesData}
+          togglePropertyStatus={handleTogglePropertyStatus}
         />
       ) : (
-        <div>Sorry, no properties to show at the moment</div>
+        <div>
+          <h5>Sorry, no properties to show at the moment</h5>
+        </div>
       )}
     </Container>
   );

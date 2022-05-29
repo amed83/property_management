@@ -1,3 +1,3 @@
-import { api } from "./api";
+import { fetchHelper } from './api';
 
-export default api;
+export default fetchHelper;

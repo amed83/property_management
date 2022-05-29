@@ -1,20 +1,23 @@
-type Methods = "GET" | "POST" | "PUT" | "DELETE";
+export type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-interface FetchOptions {
+export interface FetchOptions {
   method: Methods;
   body?: any;
   headers?: any;
 }
 
-export const api = async (endpoint: string, fetchOptions: FetchOptions) => {
+export async function fetchHelper<T>(
+  endpoint: string,
+  fetchOptions: FetchOptions,
+): Promise<T> {
   try {
     const data = await fetch(`${endpoint}`, fetchOptions);
-    if (!data.ok) {
-      throw new Error("Error fetching data");
+    if (data.status >= 400 && data.status < 600) {
+      throw new Error(data.statusText);
     }
     const json = await data.json();
     return json;
   } catch (error) {
-    throw new Error("Error fetching data");
+    throw new Error('Error fetching data');
   }
-};
+}
