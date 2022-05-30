@@ -1,37 +1,68 @@
 import { fetchHelper, FetchOptions } from './../../api/api';
-import { useCallback, useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 
-interface Response<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | undefined;
-  handleFetch: (endpoint: string, fetchOptions: FetchOptions) => void;
+interface FetchState<T> {
+  isLoading: boolean;
+  error?: Error;
+  data?: T;
 }
 
-export function useFetch<T>(): Response<T> {
-  const [data, setData] = useState<null | T>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | undefined>(undefined);
+type Action<T> =
+  | { type: 'fetchStarted' }
+  | { type: 'fetchSuccess'; payload: T }
+  | { type: 'fetchError'; payload: Error };
+
+function fetchReducer<T>(
+  state: FetchState<T>,
+  action: Action<T>,
+): FetchState<T> {
+  switch (action.type) {
+    case 'fetchStarted':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'fetchSuccess':
+      return {
+        ...state,
+        isLoading: false,
+        data: action.payload,
+      };
+    case 'fetchError':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+  }
+}
+
+interface Response<T = unknown> {
+  handleFetch: (endpoint: string, fetchOptions: FetchOptions) => void;
+  state: FetchState<T>;
+}
+
+export function useFetch<T = unknown>(): Response<T> {
+  const initialState: FetchState<T> = {
+    isLoading: false,
+    error: undefined,
+    data: undefined,
+  };
+
+  const [state, dispatchAction] = useReducer(fetchReducer, initialState);
+
   const handleFetch = useCallback(
-    async (endpoint: string, fetchOptions: FetchOptions) => {
+    async (endpoint: string, fetchOptions: RequestInit) => {
       try {
-        setLoading(true);
+        dispatchAction({ type: 'fetchStarted' });
         const response = await fetchHelper<T>(`${endpoint}`, fetchOptions);
-        setData(response);
-        setLoading(false);
+        dispatchAction({ type: 'fetchSuccess', payload: response });
       } catch (err) {
-        let errorMessage: string;
-        if (err instanceof Error) {
-          errorMessage = err.message;
-        } else {
-          errorMessage = 'Something went wrong';
-        }
-        setError(errorMessage);
-        setLoading(false);
+        dispatchAction({ type: 'fetchError', payload: err as Error });
       }
     },
     [],
   );
 
-  return { data, loading, error, handleFetch };
+  return { state, handleFetch } as Response<T>;
 }

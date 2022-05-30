@@ -8,14 +8,14 @@ export interface FetchOptions {
 
 export async function fetchHelper<T>(
   endpoint: string,
-  fetchOptions: FetchOptions,
+  fetchOptions: RequestInit,
 ): Promise<T> {
   try {
     const data = await fetch(`${endpoint}`, fetchOptions);
     if (data.status >= 400 && data.status < 600) {
       throw new Error(data.statusText);
     }
-    const json = await data.json();
+    const json = (await data.json()) as T;
     return json;
   } catch (error) {
     throw new Error('Error fetching data');

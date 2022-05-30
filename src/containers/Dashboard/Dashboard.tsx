@@ -8,23 +8,17 @@ import useFetch from '../../hooks/useFetch';
 export const Dashboard: FC = () => {
   const {
     handleFetch: getProperties,
-    data: propertiesData,
-    loading: isLoadingProperties,
-    error: errorFetchingProperties,
+    state: { data: propertiesData, isLoading, error },
   } = useFetch<PropertyProps[]>();
 
-  const {
-    handleFetch: updateProperty,
-    error: errorUpdatingProperties,
-    data: updatedPropertiesData,
-    loading: isLoadingUpdateProperties,
-  } = useFetch<PropertyProps[]>();
+  const { handleFetch: updateProperty, state: updateListState } =
+    useFetch<PropertyProps[]>();
 
   useEffect(() => {
-    getProperties('/properties/', {
+    getProperties('/properties', {
       method: 'GET',
     });
-  }, [getProperties, updatedPropertiesData]);
+  }, [getProperties, updateListState]);
 
   const handleTogglePropertyStatus = async (id: string, status: Status) => {
     updateProperty(`/properties/${id}`, {
@@ -38,7 +32,7 @@ export const Dashboard: FC = () => {
     });
   };
 
-  if (isLoadingProperties || isLoadingUpdateProperties) {
+  if (isLoading || updateListState.isLoading) {
     return (
       <div style={{ marginTop: '100px' }}>
         <h1>...Loading</h1>
@@ -46,13 +40,13 @@ export const Dashboard: FC = () => {
     );
   }
 
-  if (errorFetchingProperties || errorUpdatingProperties) {
-    return <div>Something went wrong </div>;
+  if (error || updateListState.error) {
+    return <div> {error?.message || updateListState.error?.message} </div>;
   }
 
   return (
     <Container>
-      {!isLoadingProperties && propertiesData && propertiesData.length > 0 ? (
+      {propertiesData && propertiesData.length > 0 ? (
         <PropertyList
           properties={propertiesData}
           togglePropertyStatus={handleTogglePropertyStatus}

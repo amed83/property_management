@@ -60,7 +60,7 @@ describe('Properties', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+      expect(screen.getByText('Internal Server Error')).toBeInTheDocument();
     });
   });
 
