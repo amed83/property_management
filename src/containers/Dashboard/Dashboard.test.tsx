@@ -33,18 +33,7 @@ describe('Properties', () => {
     });
   });
 
-  test('should render an error message when failing to fetch the properties list', async () => {
-    server.use(
-      rest.get('/properties/', (req, res, ctx) => {
-        return res(
-          ctx.status(500),
-          ctx.json({
-            errorMessage: `Internal Server Error`,
-          }),
-        );
-      }),
-    );
-
+  test.only('should render an error message when failing to fetch the properties list', async () => {
     const queryClient = new QueryClient({
       defaultOptions: {
         queries: {
@@ -52,6 +41,17 @@ describe('Properties', () => {
         },
       },
     });
+    server.use(
+      rest.get('/properties/', (req, res, ctx) => {
+        console.log('request here');
+        return res(
+          ctx.status(404),
+          ctx.json({
+            errorMessage: `Internal Server Error`,
+          }),
+        );
+      }),
+    );
 
     render(
       <QueryClientProvider client={queryClient}>

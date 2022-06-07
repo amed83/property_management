@@ -1,6 +1,7 @@
 {
-  "plugins": ["@typescript-eslint", "prettier", "jest","import"],
+  "plugins": ["@typescript-eslint", "react"],
   "extends": [
+    "plugin:react/recommended",
     "eslint:recommended",
     "airbnb-typescript",
     "airbnb/hooks",
@@ -13,15 +14,21 @@
     "plugin:react/jsx-runtime"
   ],
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaFeatures": {
+    "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
     "project": "./tsconfig.json"
-  },
+    },
   "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
-    "es6": true
+    "es2021": true
   },
   "rules": {
+    "react/jsx-uses-react":"on",
+    "react/react-in-jsx-scope": "on",
     "no-param-reassign": [
       "warn",
       { "props": true, "ignorePropertyModificationsFor": ["state"] }
@@ -29,10 +36,10 @@
     "react/prop-types": 0,
     "react/require-default-props": 0,
     "import/prefer-default-export": 0,
-    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-explicit-any": 0,
     "import/no-named-as-default": 0,
     "react/jsx-props-no-spreading": 1,
-    "react/react-in-jsx-scope": 0,
+
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".tsx"] }],
     "react/no-unescaped-entities": 0,
     "jsx-a11y/label-has-associated-control": 0,

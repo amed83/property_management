@@ -1,7 +1,7 @@
-import { Container, List } from "@mui/material";
-import { FC } from "react";
-import { PropertyProps, Status } from "../../types/types";
-import PropertyItem from "../PropertyItem";
+import { Container, List } from '@mui/material';
+import { FC } from 'react';
+import { PropertyProps, Status } from '../../types/types';
+import PropertyItem from '../PropertyItem';
 
 interface PropertyListProps {
   togglePropertyStatus: (id: string, status: Status) => void;
