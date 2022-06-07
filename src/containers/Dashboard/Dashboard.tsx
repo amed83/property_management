@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import Container from '@mui/material/Container';
 import { FC, useEffect } from 'react';
 import { PropertyProps, Status } from '../../types/types';
@@ -8,17 +7,27 @@ import useFetch from '../../hooks/useFetch';
 export const Dashboard: FC = () => {
   const {
     handleFetch: getProperties,
-    state: { data: propertiesData, isLoading, error },
+    state: {
+      data: getPropertiesData,
+      isLoading: getPropertiesLoading,
+      error: getPropertiesError,
+    },
   } = useFetch<PropertyProps[]>();
 
-  const { handleFetch: updateProperty, state: updateListState } =
-    useFetch<PropertyProps[]>();
+  const {
+    handleFetch: updateProperty,
+    state: {
+      data: updatePropertiesData,
+      isLoading: updatePropertyLoading,
+      error: updatePropertiesError,
+    },
+  } = useFetch<PropertyProps[]>();
 
   useEffect(() => {
     getProperties('/properties', {
       method: 'GET',
     });
-  }, [getProperties, updateListState]);
+  }, [getProperties, updatePropertiesData]);
 
   const handleTogglePropertyStatus = async (id: string, status: Status) => {
     updateProperty(`/properties/${id}`, {
@@ -32,7 +41,7 @@ export const Dashboard: FC = () => {
     });
   };
 
-  if (isLoading || updateListState.isLoading) {
+  if (getPropertiesLoading || updatePropertyLoading || !getPropertiesData) {
     return (
       <div style={{ marginTop: '100px' }}>
         <h1>...Loading</h1>
@@ -40,20 +49,33 @@ export const Dashboard: FC = () => {
     );
   }
 
-  if (error || updateListState.error) {
-    return <div> {error?.message || updateListState.error?.message} </div>;
+  console.log('getPropertiesError', getPropertiesError);
+  console.log('getPropertiesData', getPropertiesData);
+
+  if (getPropertiesError || updatePropertiesError) {
+    return (
+      <div>
+        {getPropertiesError?.message || updatePropertiesError?.message}{' '}
+      </div>
+    );
   }
+
+  // const foo = () => {
+  //   console.log('hello foo');
+  //   return 'diokan';
+  // };
 
   return (
     <Container>
-      {propertiesData && propertiesData.length > 0 ? (
+      {getPropertiesData && getPropertiesData.length > 0 ? (
         <PropertyList
-          properties={propertiesData}
+          properties={getPropertiesData}
           togglePropertyStatus={handleTogglePropertyStatus}
         />
       ) : (
         <div>
-          <h5>Sorry, no properties to show at the moment</h5>
+          <h1 style={{ color: 'red' }}>Sorry there's no property to show</h1>
+          {/* {foo()} */}
         </div>
       )}
     </Container>
