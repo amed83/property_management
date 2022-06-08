@@ -1,8 +1,9 @@
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
+import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Dashboard from '.';
-import { server } from '../../mocks/server';
+// import { server } from '../../mocks/server';
 
 describe('Properties', () => {
   test('should render loading message while loading data', async () => {
@@ -33,7 +34,20 @@ describe('Properties', () => {
     });
   });
 
-  test.only('should render an error message when failing to fetch the properties list', async () => {
+  test('should render an error message when failing to fetch the properties list', async () => {
+    const mockedServer = setupServer(
+      rest.get('/properties', (req, res, ctx) => {
+        return res(
+          ctx.status(500),
+          ctx.json({
+            errorMessage: `Internal Server Error`,
+          }),
+        );
+      }),
+    );
+
+    mockedServer.listen({ onUnhandledRequest: 'warn' });
+
     const queryClient = new QueryClient({
       defaultOptions: {
         queries: {
@@ -41,17 +55,6 @@ describe('Properties', () => {
         },
       },
     });
-    server.use(
-      rest.get('/properties/', (req, res, ctx) => {
-        console.log('request here');
-        return res(
-          ctx.status(404),
-          ctx.json({
-            errorMessage: `Internal Server Error`,
-          }),
-        );
-      }),
-    );
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -62,6 +65,7 @@ describe('Properties', () => {
     await waitFor(() => {
       expect(screen.getByText('Internal Server Error')).toBeInTheDocument();
     });
+    mockedServer.close();
   });
 
   test('should change the status of the property when the button is clicked', async () => {

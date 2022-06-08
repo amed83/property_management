@@ -18,6 +18,10 @@ export async function fetchHelper<T>(
     const json = (await data.json()) as T;
     return json;
   } catch (error) {
-    throw new Error('Error fetching data');
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    throw new Error('Generic error');
   }
 }

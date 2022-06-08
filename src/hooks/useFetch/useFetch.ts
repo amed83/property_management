@@ -1,5 +1,5 @@
-import { fetchHelper, FetchOptions } from './../../api/api';
-import { useCallback, useReducer, useState } from 'react';
+import { fetchHelper, FetchOptions } from '../../api/fetchHelper';
+import { useCallback, useReducer } from 'react';
 
 interface FetchState<T> {
   isLoading: boolean;
@@ -16,6 +16,7 @@ function fetchReducer<T>(
   state: FetchState<T>,
   action: Action<T>,
 ): FetchState<T> {
+  // console.log('action', action.type);
   switch (action.type) {
     case 'fetchStarted':
       return {
