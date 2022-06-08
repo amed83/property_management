@@ -1,9 +1,8 @@
-import { render, waitFor, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Dashboard from '.';
-// import { server } from '../../mocks/server';
 
 describe('Properties', () => {
   test('should render loading message while loading data', async () => {
@@ -15,9 +14,7 @@ describe('Properties', () => {
       </QueryClientProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('...Loading')).toBeInTheDocument();
-    });
+    expect(await screen.findByText('...Loading')).toBeInTheDocument();
   });
 
   test('should render a list of two properties', async () => {
@@ -28,10 +25,8 @@ describe('Properties', () => {
       </QueryClientProvider>,
     );
 
-    await waitFor(() => {
-      const list = screen.getByRole('list');
-      expect(list.childNodes.length).toBe(3);
-    });
+    const list = await screen.findByRole('list');
+    expect(list.childNodes.length).toBe(3);
   });
 
   test('should render an error message when failing to fetch the properties list', async () => {
@@ -62,9 +57,39 @@ describe('Properties', () => {
       </QueryClientProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Internal Server Error')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Internal Server Error'),
+    ).toBeInTheDocument();
+    mockedServer.close();
+  });
+
+  test('should render the proper message when there is no properties to show', async () => {
+    const mockedServer = setupServer(
+      rest.get('/properties', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json([]));
+      }),
+    );
+
+    mockedServer.listen({ onUnhandledRequest: 'warn' });
+
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
     });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Dashboard />
+      </QueryClientProvider>,
+    );
+
+    expect(
+      await screen.findByText(`Sorry there's no property to show`),
+    ).toBeInTheDocument();
+
     mockedServer.close();
   });
 
@@ -85,11 +110,7 @@ describe('Properties', () => {
 
     const buttons = await screen.findAllByText('Change Status');
     fireEvent.click(buttons[0]);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('property_status')[0].textContent).toBe(
-        'Property status: expired',
-      );
-    });
+    const propertiesStatus = await screen.findAllByTestId('property_status');
+    expect(propertiesStatus[0].textContent).toBe('Property status: expired');
   });
 });

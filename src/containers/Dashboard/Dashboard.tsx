@@ -1,47 +1,61 @@
 import Container from '@mui/material/Container';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { PropertyProps, Status } from '../../types/types';
 import PropertyList from '../../components/PropertyList';
-import useFetch from '../../hooks/useFetch';
+import { fetchHelper } from '../../api/fetchHelper';
 
 export const Dashboard: FC = () => {
-  const {
-    handleFetch: getProperties,
-    state: {
-      data: propertiesData,
-      isLoading: PropertiesLoading,
-      error: propertiesDataError,
-    },
-  } = useFetch<PropertyProps[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [propertiesData, setPropertiesData] = useState<
+    PropertyProps[] | undefined
+  >(undefined);
+  const [error, setError] = useState<string>('');
 
-  const {
-    handleFetch: updateProperty,
-    state: {
-      data: updatePropertiesData,
-      isLoading: updatePropertyLoading,
-      error: updatePropertiesError,
-    },
-  } = useFetch<PropertyProps[]>();
-
-  useEffect(() => {
-    getProperties('/properties', {
-      method: 'GET',
-    });
-  }, [getProperties, updatePropertiesData]);
-
-  const handleTogglePropertyStatus = async (id: string, status: Status) => {
-    updateProperty(`/properties/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        status: status === 'active' ? 'expired' : 'active',
-      }),
-    });
+  const fetchPropertiespropertiesData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetchHelper<PropertyProps[]>('/properties', {
+        method: 'GET',
+      });
+      setPropertiesData(response);
+      setIsLoading(false);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Something went wrong');
+      }
+      setIsLoading(false);
+    }
   };
 
-  const isLoading = PropertiesLoading || updatePropertyLoading;
+  useEffect(() => {
+    fetchPropertiespropertiesData();
+  }, []);
+
+  const handleTogglePropertyStatus = async (id: string, status: Status) => {
+    try {
+      setIsLoading(true);
+      await fetchHelper(`/properties/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: status === 'active' ? 'expired' : 'active',
+        }),
+      });
+
+      fetchPropertiespropertiesData();
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Something went wrong');
+      }
+      setIsLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -51,12 +65,8 @@ export const Dashboard: FC = () => {
     );
   }
 
-  if (propertiesDataError || updatePropertiesError) {
-    return (
-      <div>
-        {propertiesDataError?.message || updatePropertiesError?.message}{' '}
-      </div>
-    );
+  if (error) {
+    return <div>{error}</div>;
   }
 
   return (
@@ -67,7 +77,7 @@ export const Dashboard: FC = () => {
           togglePropertyStatus={handleTogglePropertyStatus}
         />
       )}
-      {propertiesData && propertiesData.length < 1 && (
+      {!isLoading && propertiesData && propertiesData.length < 1 && (
         <div>
           <h1 style={{ color: 'red' }}>Sorry there's no property to show</h1>
         </div>

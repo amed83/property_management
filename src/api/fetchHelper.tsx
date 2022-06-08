@@ -10,18 +10,10 @@ export async function fetchHelper<T>(
   endpoint: string,
   fetchOptions: RequestInit,
 ): Promise<T> {
-  try {
-    const data = await fetch(`${endpoint}`, fetchOptions);
-    if (data.status >= 400 && data.status < 600) {
-      throw new Error(data.statusText);
-    }
-    const json = (await data.json()) as T;
-    return json;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-
-    throw new Error('Generic error');
+  const response = await fetch(`${endpoint}`, fetchOptions);
+  if (response.status >= 400 && response.status < 600) {
+    throw new Error(response.statusText);
   }
+  const json = (await response.json()) as T;
+  return json;
 }
