@@ -36,10 +36,9 @@
     "react/prop-types": 0,
     "react/require-default-props": 0,
     "import/prefer-default-export": 0,
-    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-explicit-any": 1,
     "import/no-named-as-default": 0,
     "react/jsx-props-no-spreading": 1,
-
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx",".tsx"] }],
     "react/no-unescaped-entities": 0,
     "jsx-a11y/label-has-associated-control": 0,

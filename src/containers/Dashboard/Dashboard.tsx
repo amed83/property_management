@@ -11,7 +11,7 @@ export const Dashboard: FC = () => {
   >(undefined);
   const [error, setError] = useState<string>('');
 
-  const fetchPropertiespropertiesData = async () => {
+  const fetchPropertiesData = async () => {
     setIsLoading(true);
     try {
       const response = await fetchHelper<PropertyProps[]>('/properties', {
@@ -30,7 +30,7 @@ export const Dashboard: FC = () => {
   };
 
   useEffect(() => {
-    fetchPropertiespropertiesData();
+    fetchPropertiesData();
   }, []);
 
   const handleTogglePropertyStatus = async (id: string, status: Status) => {
@@ -46,7 +46,7 @@ export const Dashboard: FC = () => {
         }),
       });
 
-      fetchPropertiespropertiesData();
+      fetchPropertiesData();
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
