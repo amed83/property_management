@@ -2,25 +2,24 @@
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 import BedIcon from '@mui/icons-material/Bed';
-import { FC } from 'react';
-import Button from '@mui/material/Button';
+import { FC, useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import { PropertyProps } from '../../types/types';
+import { PropertyContext } from '../../containers/Dashboard/Dashboard';
 
-export interface PropertyItemProps extends PropertyProps {
-  togglePropertyStatus: (id: string, isActive: boolean) => void;
-}
-
-export const PropertyItem: FC<PropertyItemProps> = ({
+export const PropertyItem: FC<PropertyProps> = ({
   imageUrl,
   id,
   address,
   askingPrice,
   isActive,
   bedroomsNumber,
-  togglePropertyStatus,
 }) => {
+  const { togglePropertyStatus, isUpdatingStatus, updatedItemId } =
+    useContext(PropertyContext);
+
   return (
     <ListItem
       sx={{
@@ -58,9 +57,13 @@ export const PropertyItem: FC<PropertyItemProps> = ({
                 {isActive ? 'Active' : 'Expired'}
               </span>
             </Typography>
-            <Button onClick={() => togglePropertyStatus(id, isActive)}>
+
+            <LoadingButton
+              onClick={() => togglePropertyStatus(id, isActive)}
+              loading={isUpdatingStatus && updatedItemId === id}
+            >
               Change Status
-            </Button>
+            </LoadingButton>
           </Box>
         </Grid>
       </Grid>

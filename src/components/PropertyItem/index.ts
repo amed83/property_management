@@ -1,3 +1,3 @@
-import { PropertyItem } from "./PropertyItem";
+import { PropertyItem } from './PropertyItem';
 
 export default PropertyItem;

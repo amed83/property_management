@@ -5,14 +5,10 @@ import { PropertyProps } from '../../types/types';
 import PropertyItem from '../PropertyItem';
 
 interface PropertyListProps {
-  togglePropertyStatus: (id: string, isActive: boolean) => void;
   properties: PropertyProps[];
 }
 
-export const PropertyList: FC<PropertyListProps> = ({
-  properties,
-  togglePropertyStatus,
-}) => (
+export const PropertyList: FC<PropertyListProps> = ({ properties }) => (
   <Container>
     <List>
       {properties.map((prop) => (
@@ -24,7 +20,6 @@ export const PropertyList: FC<PropertyListProps> = ({
           askingPrice={prop.askingPrice}
           isActive={prop.isActive}
           bedroomsNumber={prop.bedroomsNumber}
-          togglePropertyStatus={togglePropertyStatus}
         />
       ))}
     </List>
