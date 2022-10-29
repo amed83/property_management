@@ -1,21 +1,24 @@
 import { rest, setupWorker } from 'msw';
 import { db } from './db';
 
+// export const worker = setupWorker(...db.property.toHandlers('rest'));
+
 export const worker = setupWorker(
   rest.get('/properties', (req, res, ctx) => {
-    return res(ctx.delay(400), ctx.status(200), ctx.json(db.property.getAll()));
+    return res(ctx.delay(1200), ctx.status(200), ctx.json([]));
   }),
 
   rest.put('/properties/:id', (req, res, ctx) => {
+    console.log('params', req.params);
+    console.log('body', req.body);
     const updateProperty = db.property.update({
       where: {
         id: {
           equals: req.params.id,
         },
       },
-
       data: {
-        status: req.body.status,
+        isActive: req.body?.isActive,
       },
     });
 

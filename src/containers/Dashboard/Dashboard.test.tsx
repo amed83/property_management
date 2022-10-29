@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
@@ -5,9 +6,18 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import Dashboard from '.';
 
 describe('Properties', () => {
-  test('should render loading message while loading data', async () => {
-    const queryClient = new QueryClient();
+  let queryClient: QueryClient;
+  beforeEach(() => {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    });
+  });
 
+  test('should render loading message while loading data', async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Dashboard />
@@ -18,7 +28,6 @@ describe('Properties', () => {
   });
 
   test('should render a list of two properties', async () => {
-    const queryClient = new QueryClient();
     render(
       <QueryClientProvider client={queryClient}>
         <Dashboard />
@@ -43,23 +52,13 @@ describe('Properties', () => {
 
     mockedServer.listen({ onUnhandledRequest: 'warn' });
 
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    });
-
     render(
       <QueryClientProvider client={queryClient}>
         <Dashboard />
       </QueryClientProvider>,
     );
 
-    expect(
-      await screen.findByText('Internal Server Error'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Something went wrong')).toBeInTheDocument();
     mockedServer.close();
   });
 
@@ -71,14 +70,6 @@ describe('Properties', () => {
     );
 
     mockedServer.listen({ onUnhandledRequest: 'warn' });
-
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    });
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -94,23 +85,17 @@ describe('Properties', () => {
   });
 
   test('should change the status of the property when the button is clicked', async () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    });
-
     render(
       <QueryClientProvider client={queryClient}>
         <Dashboard />
       </QueryClientProvider>,
     );
 
-    const buttons = await screen.findAllByText('Change Status');
+    const buttons = await screen.findAllByRole('button', {
+      name: 'Change Status',
+    });
     fireEvent.click(buttons[0]);
     const propertiesStatus = await screen.findAllByTestId('property_status');
-    expect(propertiesStatus[0].textContent).toBe('Property status: expired');
+    expect(propertiesStatus[0].textContent).toBe('Property status: Expired');
   });
 });

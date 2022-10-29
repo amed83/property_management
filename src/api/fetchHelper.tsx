@@ -1,9 +1,7 @@
 export type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-export interface FetchOptions {
+export interface FetchOptions extends RequestInit {
   method: Methods;
-  body?: any;
-  headers?: any;
 }
 
 export async function fetchHelper<T>(

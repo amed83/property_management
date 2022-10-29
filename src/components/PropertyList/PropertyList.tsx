@@ -1,10 +1,10 @@
 import { Container, List } from '@mui/material';
 import { FC } from 'react';
-import { PropertyProps, Status } from '../../types/types';
+import { PropertyProps } from '../../types/types';
 import PropertyItem from '../PropertyItem';
 
 interface PropertyListProps {
-  togglePropertyStatus: (id: string, status: Status) => void;
+  togglePropertyStatus: (id: string, isActive: boolean) => void;
   properties: PropertyProps[];
 }
 
@@ -21,7 +21,7 @@ export const PropertyList: FC<PropertyListProps> = ({
           imageUrl={prop.imageUrl}
           address={prop.address}
           askingPrice={prop.askingPrice}
-          status={prop.status}
+          isActive={prop.isActive}
           bedroomsNumber={prop.bedroomsNumber}
           togglePropertyStatus={togglePropertyStatus}
         />

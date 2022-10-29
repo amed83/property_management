@@ -1,63 +1,32 @@
-import Container from '@mui/material/Container';
-import { FC, useEffect, useState } from 'react';
-import { PropertyProps, Status } from '../../types/types';
+import React, { FC } from 'react';
 import PropertyList from '../../components/PropertyList';
-import { fetchHelper } from '../../api/fetchHelper';
+import { useQueryClient } from 'react-query';
+import { useGetPropertiesData } from '../../hooks/services/useGetPropertiesData';
+import { useUpdatePropertyStatus } from '../../hooks/services/useUpdatePropertyStatus';
 
 export const Dashboard: FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [propertiesData, setPropertiesData] = useState<
-    PropertyProps[] | undefined
-  >(undefined);
-  const [error, setError] = useState<string>('');
+  const queryClient = useQueryClient();
+  const {
+    data: propertiesData,
+    isLoading,
+    error: queryError,
+    isFetching,
+  } = useGetPropertiesData();
 
-  const fetchPropertiesData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetchHelper<PropertyProps[]>('/properties', {
-        method: 'GET',
-      });
-      setPropertiesData(response);
-      setIsLoading(false);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Something went wrong');
-      }
-      setIsLoading(false);
-    }
-  };
+  const { mutate, isLoading: updateIsLoading } = useUpdatePropertyStatus();
 
-  useEffect(() => {
-    fetchPropertiesData();
-  }, []);
-
-  const handleTogglePropertyStatus = async (id: string, status: Status) => {
-    try {
-      setIsLoading(true);
-      await fetchHelper(`/properties/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+  const togglePropertyStatus = (id: string, isActive: boolean) => {
+    return mutate(
+      { id, isActive },
+      {
+        onSuccess: () => {
+          return queryClient.invalidateQueries('properties');
         },
-        body: JSON.stringify({
-          status: status === 'active' ? 'expired' : 'active',
-        }),
-      });
-
-      fetchPropertiesData();
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Something went wrong');
-      }
-      setIsLoading(false);
-    }
+      },
+    );
   };
 
-  if (isLoading) {
+  if (isLoading || updateIsLoading || isFetching) {
     return (
       <div style={{ marginTop: '100px' }}>
         <h1>...Loading</h1>
@@ -65,23 +34,28 @@ export const Dashboard: FC = () => {
     );
   }
 
-  if (error) {
-    return <div>{error}</div>;
+  if (queryError) {
+    return <div>Something went wrong</div>;
   }
 
   return (
-    <Container>
-      {!isLoading && propertiesData && propertiesData.length > 0 && (
-        <PropertyList
-          properties={propertiesData}
-          togglePropertyStatus={handleTogglePropertyStatus}
-        />
-      )}
+    <div>
+      {!isLoading &&
+        !updateIsLoading &&
+        propertiesData &&
+        propertiesData.length > 0 && (
+          <PropertyList
+            properties={propertiesData}
+            togglePropertyStatus={togglePropertyStatus}
+          />
+        )}
       {!isLoading && propertiesData && propertiesData.length < 1 && (
         <div>
-          <h1 style={{ color: 'red' }}>Sorry there's no property to show</h1>
+          <h1 style={{ color: 'red' }}>
+            Sorry there&apos;s no property to show
+          </h1>
         </div>
       )}
-    </Container>
+    </div>
   );
 };

@@ -16,7 +16,6 @@ function fetchReducer<T>(
   state: FetchState<T>,
   action: Action<T>,
 ): FetchState<T> {
-  // console.log('action', action.type);
   switch (action.type) {
     case 'fetchStarted':
       return {
@@ -42,7 +41,7 @@ interface Response<T = unknown> {
   handleFetch: (endpoint: string, fetchOptions: FetchOptions) => void;
   state: FetchState<T>;
 }
-
+// not used, just for reference
 export function useFetch<T = unknown>(): Response<T> {
   const initialState: FetchState<T> = {
     isLoading: false,
