@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Container, List } from '@mui/material';
 import { FC } from 'react';
 import { PropertyProps } from '../../types/types';

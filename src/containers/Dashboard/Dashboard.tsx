@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { FC } from 'react';
 import PropertyList from '../../components/PropertyList';
 import { useQueryClient } from 'react-query';
