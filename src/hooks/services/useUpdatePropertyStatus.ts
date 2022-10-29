@@ -1,10 +1,9 @@
 import { useMutation } from 'react-query';
 import fetchHelper from '../../api';
-import { PropertyProps } from '../../types/types';
 
 const handleTogglePropertyStatus = async (id: string, isActive: boolean) => {
   try {
-    const response = await fetchHelper(`/properties/${id}`, {
+    await fetchHelper(`/properties/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -13,7 +12,6 @@ const handleTogglePropertyStatus = async (id: string, isActive: boolean) => {
         isActive: !isActive,
       }),
     });
-    return response as PropertyProps;
   } catch (err) {
     throw new Error('error');
   }

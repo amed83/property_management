@@ -1,8 +1,7 @@
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { db } from './db';
-
-// export const server = setupServer(...db.property.toHandlers('rest'));
+import { Params, UpdateRequestBody } from './types';
 
 export const server = setupServer(
   rest.get('/properties', (req, res, ctx) => {
@@ -37,7 +36,7 @@ export const server = setupServer(
     );
   }),
 
-  rest.put('/properties/:id', (req, res, ctx) => {
+  rest.put<UpdateRequestBody, Params>('/properties/:id', (req, res, ctx) => {
     const updateProperty = db.property.update({
       where: {
         id: {
@@ -45,7 +44,7 @@ export const server = setupServer(
         },
       },
       data: {
-        status: req.body?.status,
+        isActive: req.body.isActive,
       },
     });
 
