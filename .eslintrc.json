@@ -27,7 +27,7 @@
     "es2021": true
   },
   "rules": {
-    "react/jsx-uses-react":1,
+    "react/jsx-uses-react":"off",
     "react/react-in-jsx-scope": "off",
     "no-param-reassign": [
       "warn",

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import PropertyList from '../../components/PropertyList';
 import { useQueryClient } from 'react-query';
 import { useGetPropertiesData } from '../../hooks/services/useGetPropertiesData';
@@ -16,7 +16,6 @@ export const Dashboard: FC = () => {
   const { mutate, isLoading: updateIsLoading } = useUpdatePropertyStatus();
 
   const togglePropertyStatus = (id: string, isActive: boolean) => {
-    console.log('calling toggle');
     return mutate(
       { id, isActive },
       {
