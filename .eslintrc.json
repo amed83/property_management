@@ -2,6 +2,7 @@
   "plugins": ["@typescript-eslint", "react"],
   "extends": [
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "eslint:recommended",
     "airbnb-typescript",
     "airbnb/hooks",
@@ -10,8 +11,7 @@
     "plugin:jest/recommended",
     "plugin:react/recommended",
     "prettier",
-    "plugin:import/recommended",
-    "plugin:react/jsx-runtime"
+    "plugin:import/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -27,8 +27,8 @@
     "es2021": true
   },
   "rules": {
-    "react/jsx-uses-react":1,
-    "react/react-in-jsx-scope": 1,
+    "react/jsx-uses-react":0,
+    "react/react-in-jsx-scope": 0,
     "no-param-reassign": [
       "warn",
       { "props": true, "ignorePropertyModificationsFor": ["state"] }
