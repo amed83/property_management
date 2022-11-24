@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';

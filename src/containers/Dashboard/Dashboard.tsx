@@ -1,7 +1,6 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { createContext, FC, useState } from 'react';
-import PropertyList from '../../components/PropertyList';
 import { useQueryClient } from 'react-query';
+import PropertyList from '../../components/PropertyList';
 import { useGetPropertiesData } from '../../hooks/services/useGetPropertiesData';
 import { useUpdatePropertyStatus } from '../../hooks/services/useUpdatePropertyStatus';
 
@@ -32,9 +31,7 @@ export const Dashboard: FC = () => {
     return mutate(
       { id, isActive },
       {
-        onSuccess: () => {
-          return queryClient.invalidateQueries('properties');
-        },
+        onSuccess: () => queryClient.invalidateQueries('properties'),
       },
     );
   };

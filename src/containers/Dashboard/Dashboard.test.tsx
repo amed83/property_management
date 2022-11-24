@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
