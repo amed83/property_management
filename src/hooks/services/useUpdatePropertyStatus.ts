@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
 import fetchHelper from '../../api';
 
-const handleTogglePropertyStatus = async (id: any, isActive: boolean) => {
+const handleTogglePropertyStatus = async (id: string, isActive: boolean) => {
   try {
     await fetchHelper(`/properties/${id}`, {
       method: 'PUT',
