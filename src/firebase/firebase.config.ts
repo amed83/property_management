@@ -4,7 +4,7 @@ import { initializeApp } from 'firebase/app';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB4vmT_Z9FFEOdFSYLLxR2z8RYZIZ9rBjs',
+  apiKey: process.env.REACT_APP_FIRE_BASE_API_KEY,
   authDomain: 'properties-management-dff37.firebaseapp.com',
   projectId: 'properties-management-dff37',
   storageBucket: 'properties-management-dff37.appspot.com',
@@ -15,4 +15,4 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-console.log('hello');
+export default app;
