@@ -1,25 +1,37 @@
 import { Box, Container, TextField, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { FC, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthDispatch } from '../../../hooks/useAuthDispatch';
-import { useAuthState } from '../../../hooks/useAuthState';
-import { login } from '../../../providers/AuthProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuthDispatch } from 'hooks/useAuthDispatch';
+import { useAuthState } from 'hooks/useAuthState';
+import { login } from 'providers/AuthProvider';
 
 interface LoginProps {
   email: string;
   password: string;
 }
 
+type RedirectLocationState = {
+  redirectTo: Location;
+};
+
 export const Login: FC = () => {
   const dispatch = useAuthDispatch();
   const { isLoggedIn, isLoading, hasError } = useAuthState();
   const navigate = useNavigate();
+
+  const { state: locationState } = useLocation();
+
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/');
+      if (locationState) {
+        const { redirectTo } = locationState as RedirectLocationState;
+        navigate(`${redirectTo.pathname}${redirectTo.search}`);
+      } else {
+        navigate('/');
+      }
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, locationState]);
 
   const [inputValue, setInputValue] = useState<LoginProps>({
     email: '',

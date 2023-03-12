@@ -6,7 +6,7 @@ import BedIcon from '@mui/icons-material/Bed';
 import { FC, useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import { PropertyProps } from '../../types/types';
-import { PropertyContext } from '../../containers/Dashboard/Dashboard';
+import { PropertyContext } from '../../features/dashboard/components/Dashboard';
 
 export const PropertyItem: FC<PropertyProps> = ({
   imageUrl,

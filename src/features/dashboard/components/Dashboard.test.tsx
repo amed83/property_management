@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Dashboard from '.';
+import { Dashboard } from './Dashboard';
 
 describe('Properties', () => {
   let queryClient: QueryClient;

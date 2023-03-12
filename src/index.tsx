@@ -6,7 +6,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './providers/AuthProvider';
+import { AuthProvider } from 'providers/AuthProvider';
+import React from 'react';
 
 if (process.env.NODE_ENV === 'development') {
   const { worker } = require('./mocks/browser');
@@ -25,13 +26,15 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
-  <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </QueryClientProvider>
-  </BrowserRouter>,
+  <React.Suspense fallback={<></>}>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  </React.Suspense>,
 );
 
 // If you want to start measuring performance in your app, pass a function

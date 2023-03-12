@@ -1,8 +1,8 @@
 import { createContext, FC, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import PropertyList from '../../components/PropertyList';
-import { useGetPropertiesData } from '../../hooks/services/useGetPropertiesData';
-import { useUpdatePropertyStatus } from '../../hooks/services/useUpdatePropertyStatus';
+import PropertyList from '../../../components/PropertyList';
+import { useGetPropertiesData } from '../../../hooks/services/useGetPropertiesData';
+import { useUpdatePropertyStatus } from '../../../hooks/services/useUpdatePropertyStatus';
 
 interface ContextProps {
   togglePropertyStatus: (id: string, isActive: boolean) => void;

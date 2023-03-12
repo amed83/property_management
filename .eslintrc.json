@@ -16,6 +16,17 @@
       "ecmaVersion": 6,
       "project": "tsconfig.json"
     },
+    "settings":{
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"]
+      },
+      "import/resolver": {
+        "typescript": {
+          "project": ["tsconfig.json", "package/tsconfig.json"]
+        }
+      }
+    },
+
     "env": {
       "browser": true,
       "es6": true
