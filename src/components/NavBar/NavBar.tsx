@@ -1,15 +1,12 @@
 import Box from '@mui/material/Box';
-import { ProfileMenu } from './ProfileMenu';
 
-export const Navigation = () => {
+export const NavBar = () => {
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'flex-end',
       }}
-    >
-      <ProfileMenu />
-    </Box>
+    ></Box>
   );
 };

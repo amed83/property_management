@@ -1,12 +1,10 @@
-import './App.css';
-
 import { AppRoutes } from 'routes';
-import Navigation from 'components/Navigation';
+import ProfileMenu from 'components/ProfileMenu';
 
 function App() {
   return (
     <>
-      <Navigation />
+      <ProfileMenu />
       <AppRoutes />
     </>
   );
