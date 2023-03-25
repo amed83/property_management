@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase.config';
 
-interface AuthState {
+export interface AuthState {
   isLoggedIn: boolean;
   isLoading: boolean;
   authToken: string | null;

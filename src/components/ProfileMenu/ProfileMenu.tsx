@@ -60,7 +60,7 @@ export const ProfileMenu = () => {
               to="/login"
               style={{ textDecoration: 'none', color: 'black' }}
             >
-              Login
+              Sign In
             </Link>
           </MenuItem>
         )}
